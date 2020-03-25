@@ -21,13 +21,21 @@
                 <div class="hot">
                     <h2>热门文章</h2>
                     <ul>
-                        <li v-for="item in hotArticleList" :key="item.id">
-                            <span :class="[{first: item.id === 1},{second: item.id === 2},{third: item.id === 3}]">{{item.id}}</span>
+                        <li v-for="(item,index) in hotArticleList" :key="index">
+                            <span :class="[{first: index === 0},{second: index === 1},{third: index === 2}]">{{index+1}}</span>
                             <span>{{item.title}}</span>
                         </li>
                     </ul>
                 </div>
-                <div class="recommend"></div>
+                <div class="recommend">
+                    <h2>置顶推荐</h2>
+                    <ul>
+                        <li v-for="(item,index) in getArticleRecommend" :key="index">
+                            <span :class="{first: index === 0}">{{index+1}}</span>
+                            <span>{{item.title}}</span>
+                        </li>
+                    </ul>
+                </div>
                 <div class="visitor"></div>
             </el-aside>
         </el-container>
@@ -35,6 +43,7 @@
 </template>
 
 <script>
+    import articleService from "../api/articleService";
     export default {
         name: "Container",
         data() {
@@ -54,12 +63,40 @@
                 ]
             }
         },
+        created() {
+            this.getArticleInfo();
+            this.getArticleHot();
+        },
         methods: {
             handleMouseenter(e) {
                 this.coverTop = e.target.offsetTop;
             },
             handleMouseLeave() {
                 this.coverTop = 0;
+            },
+
+            //获取文章信息
+            async getArticleInfo() {
+                let res = await articleService.getArticleInfo();
+                let data = res.data;
+                if (data.code === 0){
+                    this.articleTypeList = data.data.tags;
+                    this.articleTypeList.unshift('全部文章');
+                }
+            },
+            //获取热门文章
+            async getArticleHot() {
+                let res = await articleService.getArticleHot();
+                let data = res.data;
+                if (data.code === 0){
+                    this.hotArticleList = data.data;
+                }
+            },
+        },
+        computed: {
+            //计算置顶推荐文章
+            getArticleRecommend() {
+                return [this.hotArticleList[0]] || [];
             }
         }
     }
@@ -147,7 +184,7 @@
                         }
                     }
                 }
-                > .hot{
+                > .hot, .recommend{
                     width: 100%;
                     background-color: #fff;
                     margin-top: 20px;

@@ -3,8 +3,8 @@
         <div class="nav-main">
             <div class="n-m-logo">Mr.Gan</div>
             <div class="n-m-login">
-                <el-button type="primary" size="mini">登录</el-button>
-                <el-button type="success" size="mini">注册</el-button>
+                <el-button type="primary" size="mini" id="login">登录</el-button>
+                <el-button type="success" size="mini" id="register">注册</el-button>
             </div>
             <div class="n-m-nav">
                 <ul :class="'list'+whichActive">
@@ -68,6 +68,12 @@
             float: right;
             height: 60px;
             line-height: 60px;
+            #login {
+                background-color: #2177b8;
+            }
+            #register {
+                background-color: #2c9678;
+            }
         }
         .n-m-nav{
             float: right;
