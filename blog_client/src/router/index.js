@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/Home')
   },
   {
-    path: '/blog',
+    path: '/blog/:id',
     name: 'Blog',
     component: () => import('../views/Blog')
   },
@@ -30,7 +30,7 @@ const routes = [
     component: () => import('../views/Links')
   },
   {
-    path: '/s',
+    path: '/about',
     name: 'About',
     component: () => import('../views/About')
   }

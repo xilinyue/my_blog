@@ -7,7 +7,7 @@
 
 <script>
     import Nav from "../../components/Nav";
-    import Container from "../../components/Container";
+    import Container from "./Container";
     export default {
         name: "index",
         components: {

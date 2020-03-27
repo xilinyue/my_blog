@@ -39,6 +39,32 @@ router.get('/getArticleHot',(req,res) => {
                 data: null
             })
         })
+});
+//分页查询获取数据
+/**
+ * @params
+ * @tag   根据文章标签搜索文章
+ * @skip @limit 分页参数
+ */
+router.get('/getArticleList',(req,res) => {
+    let {skip,limit,tag} = req.query;
+    limit = parseInt(limit);
+    skip = parseInt(skip);
+    let options = tag?{tag}:{};
+    articelModel.find(options,{__v: 0},{skip,limit,sort: {pv: -1}})    // TODO之后将sort换成date
+        .then(data => {
+            res.send({
+                code: 0,
+                msg: '数据获取成功',
+                data
+            })
+        }).catch(err => {
+            res.send({
+                code: 5,
+                msg: '服务器错误',
+                data: null
+            })
+        });
 })
 
 

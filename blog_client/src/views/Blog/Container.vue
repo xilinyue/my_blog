@@ -1,9 +1,11 @@
 <template>
     <div id="container">
         <el-container>
-            <el-main></el-main>
+            <el-main>
+                <article-list></article-list>
+            </el-main>
             <el-aside>
-                <div class="search">
+                <div class="search" :class="{'fixed-active': isHasFixed}">
                     <div class="search-main">
                         <input type="text" placeholder="请输入搜索内容" />
                         <i class="el-icon-search"></i>
@@ -11,13 +13,13 @@
                     <div class="search-article">
                         <ul @mouseleave="handleMouseLeave">
                             <li v-for="(item,index) in articleTypeList" :key="item + index"
-                                @mouseenter="handleMouseenter">
+                                @mouseenter="handleMouseenter(index)" @click="changeIndex(index)">
                                 {{item}}
                             </li>
                         </ul>
-                        <div class="cover" :style="{top: coverTop + 'px'}"></div>
+                        <div class="cover" :style="{top: coverTop * 40 + 'px'}"></div>
                     </div>
-                </div>
+                </div >
                 <div class="hot">
                     <h2>热门文章</h2>
                     <ul>
@@ -36,30 +38,48 @@
                         </li>
                     </ul>
                 </div>
-                <div class="visitor"></div>
+                <div class="visitor">
+                    <h2>最近访客</h2>
+                    <ul>
+                        <li v-for="(item,index) in visitorList" :style="{backgroundImage: `url(http://localhost:3000${item.photo})`}">
+                            <span>{{item.username}}</span>
+                        </li>
+                    </ul>
+                </div>
             </el-aside>
         </el-container>
     </div>
 </template>
 
 <script>
-    import articleService from "../api/articleService";
+    import articleService from "../../api/articleService";
+    import ArticleList from "./ArticleList";
     export default {
         name: "Container",
+        components: {
+            ArticleList
+        },
         data() {
             return{
                 searchInput: '',
+                isHasFixed: false,
                 //文章分类
                 articleTypeList: ['全部文章','个人日记','HTML5&CSS3','JavaScript','Vue&Node','其他'],
                 coverTop: 0,
-                hotArticleList: [
-                    {id: 1, title: '模板分享'},
-                    {id: 2, title: '2018最新版QQ音乐api调用'},
-                    {id: 3, title: '我的第一个C/S项目'},
-                    {id: 4, title: '新增QQ音乐和网易云音乐搜索'},
-                    {id: 5, title: 'MUI动态加载组件'},
-                    {id: 6, title: '逆水寒'},
-                    {id: 7, title: 'MUI框架快速开发APP'}
+                hotArticleList: [{title: ''}],
+                visitorList: [
+                    {photo: '/images/defaultSurface.png',username: '小钰'},
+                    {photo: '/images/defaultSurface.png',username: '西林月'},
+                    {photo: '/images/defaultSurface.png',username: '流苏'},
+                    {photo: '/images/defaultSurface.png',username: '青蛇'},
+                    {photo: '/images/defaultSurface.png',username: '醉拳'},
+                    {photo: '/images/defaultSurface.png',username: '梦游小子'},
+                    {photo: '/images/defaultSurface.png',username: '梦里生'},
+                    {photo: '/images/defaultSurface.png',username: '轮回'},
+                    {photo: '/images/defaultSurface.png',username: '青釉'},
+                    {photo: '/images/defaultSurface.png',username: '迷彩'},
+                    {photo: '/images/defaultSurface.png',username: '心幽'},
+                    {photo: '/images/defaultSurface.png',username: '胖迪'},
                 ]
             }
         },
@@ -67,12 +87,27 @@
             this.getArticleInfo();
             this.getArticleHot();
         },
+        mounted() {
+            //监听window的滚动事件
+            window.addEventListener('scroll',this.handleScroll)
+        },
         methods: {
-            handleMouseenter(e) {
-                this.coverTop = e.target.offsetTop;
+            handleMouseenter(index) {
+                this.coverTop = index;
             },
             handleMouseLeave() {
-                this.coverTop = 0;
+                this.coverTop = this.$route.params.id;
+            },
+            handleScroll() {
+                let top = document.documentElement.scrollTop;
+                if (top >= 1222){
+                    this.isHasFixed = true;
+                }else{
+                    this.isHasFixed = false;
+                }
+            },
+            changeIndex(index){
+                this.$router.push("/blog/"+index);
             },
 
             //获取文章信息
@@ -97,6 +132,15 @@
             //计算置顶推荐文章
             getArticleRecommend() {
                 return [this.hotArticleList[0]] || [];
+            },
+
+            id() {
+                return this.$route.params.id;
+            }
+        },
+        watch: {
+            id() {
+                this.coverTop = this.$route.params.id;
             }
         }
     }
@@ -114,11 +158,14 @@
             max-width: 1360px;
             margin: 0 auto;
             padding: 0 50px;
+            > .el-main{
+                padding-top: 0;
+            }
             > .el-aside{
                 width: 300px;
-                height: 1000px;
                 > .search{
-                    width: 100%;
+                    width: 300px;
+                    z-index: 3;
                     background: #fff;
                     > .search-main{
                         position: relative;
@@ -183,6 +230,25 @@
                             transition: top .3s;
                         }
                     }
+                    &.fixed-active{
+                        position: fixed;
+                        top: 80px;
+                        animation: searchMove 1s ease-in-out;
+                    }
+                    @keyframes searchMove {
+                        0% {
+                            top: -500px;
+                        }
+                        40%{
+                            top: 80px;
+                        }
+                        70%{
+                            top: 60px;
+                        }
+                        100% {
+                            top: 80px;
+                        }
+                    }
                 }
                 > .hot, .recommend{
                     width: 100%;
@@ -236,6 +302,45 @@
                                     color: #f07c82;
                                     text-decoration: underline;
                                 }
+                            }
+                        }
+                    }
+                }
+                > .visitor {
+                    width: 100%;
+                    background-color: #fff;
+                    margin-top: 20px;
+                    padding: 20px;
+                    box-sizing: border-box;
+                    h2 {
+                        width: 100%;
+                        font-weight: lighter;
+                        font-size: 20px;
+                        color: #7a7374;
+                        border-bottom: 1px solid #dad4cb;
+                        padding-bottom: 7px;
+                        margin-bottom: 10px;
+                    }
+                    ul{
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        li{
+                            position: relative;
+                            width: 60px;
+                            height: 60px;
+                            background-repeat: no-repeat;
+                            background-size: cover;
+                            text-align: center;
+                            cursor: pointer;
+                            span{
+                                position: absolute;
+                                left: 0;
+                                right: 0;
+                                bottom: 0;
+                                background-color: #CCCCCC30;
+                                font-size: 12px;
+                                color: #fff;
                             }
                         }
                     }

@@ -13,7 +13,7 @@
                     <li><router-link to="/message">留言</router-link></li>
                     <li><router-link to="/diary">日记</router-link></li>
                     <li><router-link to="/links">友链</router-link></li>
-                    <li><router-link to="about">关于</router-link></li>
+                    <li><router-link to="/about">关于</router-link></li>
                 </ul>
             </div>
         </div>
