@@ -16,6 +16,7 @@
             <div class="content">
                 <a href="javascript:;" class="cover">
                     <img :src="'http://localhost:3000/'+item.surface">
+                    <div class="shadow"></div>
                 </a>
                 {{item.content.substring(0,50)}}
             </div>
@@ -39,6 +40,8 @@
                 </div>
             </aside>
         </div>
+        <div class="no-more" v-if="ifNoMore">我也是有底线的^_^</div>
+        <div class="loading" v-if="ifLoading">正在加载中...</div>
     </div>
 </template>
 
@@ -49,11 +52,13 @@
         data() {
             return{
                 query: {
-                    index: 0,
+                    index: this.$route.params.id,
                     skip: 0,
                     limit: 5
                 },
-                articleList: []
+                articleList: [],
+                ifNoMore: false,
+                ifLoading: false
             }
         },
         filters: {
@@ -77,14 +82,41 @@
         },
         watch: {
             id() {
-                this.query.index = this.id;
+                this.query = {index: this.id, skip: 0, limit: 5};
+                this.ifNoMore = false;
+                this.ifLoading = false;
+                document.documentElement.scrollTop = 0;
                 this.getArticleList();
             }
         },
         mounted() {
             this.getArticleList();
+
+            //监听窗口滚动
+            window.addEventListener('scroll',this.handleScroll);
         },
         methods: {
+            //监听窗口滚动执行的函数
+            handleScroll() {
+                if (this.ifNoMore || this.ifLoading) return;
+                let domHeight = document.documentElement.offsetHeight,
+                    windowHeight = document.documentElement.clientHeight,
+                    scrollHeight = document.documentElement.scrollTop;
+
+                if (scrollHeight + windowHeight >= domHeight - 20){
+                    this.ifLoading = true;
+                    this.query.skip += this.query.limit;
+                    articleService.getArticleList(this.query).then(res => {
+                        this.ifLoading = false;
+                        let data = res.data.data;
+                        if (data.length){
+                            this.articleList.push(...data);
+                        }else{
+                            this.ifNoMore = true;
+                        }
+                    });
+                }
+            },
             getArticleList() {
                 articleService.getArticleList(this.query).then(res => {
                     let data = res.data.data;
@@ -107,6 +139,12 @@
             padding: 20px 30px 25px;
             margin-bottom: 20px;
             overflow: hidden;
+            animation: itemShow 1s 1;
+            animation-fill-mode: forwards;
+            @keyframes itemShow{
+                0%{transform: scale(0); opacity: 0}
+                100%{transform: scale(1); opacity: 1}
+            }
             &.top-one::before{
                 content: '置顶';
                 position: absolute;
@@ -173,19 +211,35 @@
                 position: relative;
                 min-height: 200px;
                 a{
-                    color: #3e8bc7;
                     margin: 0 2px;
                     img{
                         display: block;
                         width: 100%!important;
                         height: 100%!important;
                     }
-                    &:hover{
-                        color: #6bc30d;
-                        text-decoration: underline;
+                    .shadow{
+                        position: absolute;
+                        display: block;
+                        left: 0;
+                        top: 0;
+                        width: 30px;
+                        height: 180px;
+                        background-color: #eeeeee10;
+                        transform: skew(-20deg);
+                        opacity: 0;
+                    }
+                    &:hover > .shadow{
+                        opacity: 1;
+                        animation: coverMove .3s 1;
+                        animation-fill-mode: forwards;
+                    }
+                    @keyframes coverMove{
+                        0%{transform: skew(-20deg) translateX(-60px)}
+                        100%{transform: skew(-20deg) translateX(300px)}
                     }
                 }
                 .cover{
+                    position: relative;
                     display: block;
                     width: 300px;
                     height: 180px;
@@ -241,6 +295,16 @@
                     }
                 }
             }
+        }
+        > .no-more{
+            width: 100%;
+            height: 30px;
+            text-align: center;
+        }
+        > .loading{
+            width: 100%;
+            height: 30px;
+            text-align: center;
         }
     }
 </style>

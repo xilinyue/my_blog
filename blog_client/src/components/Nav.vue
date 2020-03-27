@@ -3,13 +3,13 @@
         <div class="nav-main">
             <div class="n-m-logo">Mr.Gan</div>
             <div class="n-m-login">
-                <el-button type="primary" size="mini" id="login">登录</el-button>
-                <el-button type="success" size="mini" id="register">注册</el-button>
+                <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
+                <el-button type="success" size="mini" id="register" @click="handleNavClick('register')">注册</el-button>
             </div>
             <div class="n-m-nav">
                 <ul :class="'list'+whichActive">
                     <li><router-link to="/">首页</router-link></li>
-                    <li><router-link to="/blog">博客</router-link></li>
+                    <li><router-link to="/blog/0">博客</router-link></li>
                     <li><router-link to="/message">留言</router-link></li>
                     <li><router-link to="/diary">日记</router-link></li>
                     <li><router-link to="/links">友链</router-link></li>
@@ -32,6 +32,15 @@
             whichActive() {
                 let index = this.routerList.indexOf(this.$route.name);
                 return index + 1;
+            }
+        },
+        methods: {
+            handleNavClick(type) {
+                if (type === 'login'){
+                    this.$router.push('/login');
+                }else{
+                    this.$router.push('/register');
+                }
             }
         }
     }

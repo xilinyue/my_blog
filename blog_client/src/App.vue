@@ -9,6 +9,7 @@
     @import "assets/css/font.css";
     #app{
         width: 100%;
+        height: 100%;
         background: url("assets/img/bg.png") center top/cover fixed;
     }
 </style>

@@ -65,7 +65,7 @@
                 isHasFixed: false,
                 //文章分类
                 articleTypeList: ['全部文章','个人日记','HTML5&CSS3','JavaScript','Vue&Node','其他'],
-                coverTop: 0,
+                coverTop: this.$route.params.id,
                 hotArticleList: [{title: ''}],
                 visitorList: [
                     {photo: '/images/defaultSurface.png',username: '小钰'},
@@ -154,7 +154,6 @@
         > .el-container{
             box-sizing: border-box;
             width: 100%;
-            height: 2000px;
             max-width: 1360px;
             margin: 0 auto;
             padding: 0 50px;
