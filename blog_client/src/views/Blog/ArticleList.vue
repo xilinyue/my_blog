@@ -1,5 +1,6 @@
 <template>
     <div class="article-list">
+        <el-backtop></el-backtop>
         <div class="list-item" v-for="(item,index) in articleList" :key="item._id" :class="{'top-one': index === 0}">
             <h5>
                 <span>【{{item.type}}】</span>
@@ -102,7 +103,6 @@
                 let domHeight = document.documentElement.offsetHeight,
                     windowHeight = document.documentElement.clientHeight,
                     scrollHeight = document.documentElement.scrollTop;
-
                 if (scrollHeight + windowHeight >= domHeight - 20){
                     this.ifLoading = true;
                     this.query.skip += this.query.limit;

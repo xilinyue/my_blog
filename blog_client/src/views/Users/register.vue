@@ -55,14 +55,24 @@
             goHome() {
                 this.$router.push('/home')
             },
-            registerUser(){}
+            registerUser(){
+                this.$refs.registerForm.validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+
+                        return false;
+                    }
+                });
+            }
         }
     }
 </script>
 
 <style lang="less" scoped>
 #register{
-    height: 100%;
+    /*height: 100%;*/
+    height: 937px;
     overflow: hidden;
     .register{
         position: relative;
@@ -85,15 +95,15 @@
                 outline: 0;
             }
         }
-        /deep/ .el-button:focus, .el-button:hover {
+        .el-button{
+            background: linear-gradient(to right,#ed5a65,#2177b8);
             color: #fff;
             font-weight: bold;
-            border-color: #2c9678;
-            background-color: #2c9678;
+            border: none;
         }
         .home{
             position: absolute;
-            color: #2177b8;
+            color: #fff;
             font-weight: bold;
             font-size: 16px;
             bottom: 0;
