@@ -47,7 +47,7 @@ app.use((req,res,next) => {
 });
 //子路由
 app.use('', require('./routes/index'));
-app.use('/api/users', require('./routes/users'));
+app.use('/api/user', require('./routes/users'));
 app.use('/api/article', require('./routes/article'));
 
 module.exports = app;

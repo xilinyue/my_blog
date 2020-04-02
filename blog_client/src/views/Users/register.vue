@@ -16,8 +16,9 @@
                 <div class="svg" v-html="registerVCode.svgCodeHtml"></div>
                 <el-link :disabled="registerVCode.refreshDisabled" @click="handleRefresh">{{registerVCode.svgCodeText}}</el-link>
             </el-form-item>
-            <el-button @click="registerUser">注册</el-button>
-            <span class="home" @click="goHome">返回首页...</span>
+            <el-button @click="registerUser" :disabled="disabled">注册</el-button>
+            <span class="home" @click="handleClick('/home')">返回首页...</span>
+            <span class="login" @click="handleClick('/login')">登录</span>
         </el-form>
     </div>
 </template>
@@ -76,7 +77,8 @@
                     svgCodeText: '刷新',
                     timer: null,
                     num: 59
-                }
+                },
+                disabled: false
             }
         },
         mounted() {
@@ -84,8 +86,8 @@
             this.refresh();
         },
         methods: {
-            goHome() {
-                this.$router.push('/home')
+            handleClick(path) {
+                this.$router.push(path)
             },
             refresh() {
                 this.registerVCode.refreshDisabled = true;
@@ -126,9 +128,26 @@
             registerUser(){
                 this.$refs.registerForm.validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        this.disabled = true;
+                        userService.registerUser(this.registerForm).then(res => {
+                            let data = res.data;
+                            if (data.code !== 0){
+                                this.$message({
+                                    type: 'error',
+                                    message: data.msg,
+                                    duration: 2000
+                                });
+                                this.disabled = false;
+                                return false;
+                            }
+                            this.$message({
+                                type: 'success',
+                                message: data.msg,
+                                duration: 2000
+                            });
+                            this.$router.push('/login');
+                        });
                     } else {
-
                         return false;
                     }
                 });
@@ -200,7 +219,16 @@
             font-weight: bold;
             font-size: 16px;
             bottom: 0;
-            right: 20px;
+            right: 60px;
+            cursor: pointer;
+        }
+        .login{
+            position: absolute;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            bottom: 0;
+            right: 10px;
             cursor: pointer;
         }
     }

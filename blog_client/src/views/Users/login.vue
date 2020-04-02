@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import userService from "../../api/userService";
     export default {
         name: "login",
         data() {
@@ -52,7 +53,16 @@
             userLogin() {
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                        userService.loginUser(this.loginForm).then(res => {
+                            let data = res.data
+                            if (data.code !== 0) {
+                                this.$message({
+                                    type: 'error',
+                                    message: data.msg,
+                                    duration: 2000
+                                });
+                            }
+                        })
                     } else {
 
                         return false;

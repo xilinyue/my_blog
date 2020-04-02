@@ -34,6 +34,7 @@ router.get('/register/getCheckSvgCode', function(req, res) {
     })
   }
 });
+
 //图形验证码校验
 router.post('/register/checkVCode',(req,res) => {
   let {vcode} = req.body;
@@ -52,5 +53,6 @@ router.post('/register/checkVCode',(req,res) => {
     })
   }
 });
+
 
 module.exports = router;

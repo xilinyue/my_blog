@@ -8,5 +8,13 @@ export default {
     //验证码验证
     checkVCode(vcode){
         return request.post('/register/checkVCode',{vcode});
+    },
+    //用户注册接口
+    registerUser(params) {
+        return request.post('/api/user/addUser',params);
+    },
+    //用户登录接口
+    loginUser(params) {
+        return request.post('/api/user/login',params);
     }
 }
