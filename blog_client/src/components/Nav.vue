@@ -3,8 +3,16 @@
         <div class="nav-main">
             <div class="n-m-logo">Mr.Gan</div>
             <div class="n-m-login">
-                <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
-                <el-button type="success" size="mini" id="register" @click="handleNavClick('register')">注册</el-button>
+                <div v-if="userLogin">
+                    <div class="userInfo">
+                        <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+userInfo.avatar+'.jpg)'}"></div>
+                        <span>{{userInfo.username}}</span>
+                    </div>
+                </div>
+                <div v-else>
+                    <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
+                    <el-button type="success" size="mini" id="register" @click="handleNavClick('register')">注册</el-button>
+                </div>
             </div>
             <div class="n-m-nav">
                 <ul :class="'list'+whichActive">
@@ -21,11 +29,14 @@
 </template>
 
 <script>
+    import userService from "../api/userService";
     export default {
         name: "Nav",
         data() {
             return{
-                routerList: ['Home','Blog','Message','Diary','Links','About']
+                routerList: ['Home','Blog','Message','Diary','Links','About'],
+                userLogin: false,
+                userInfo: null
             }
         },
         computed: {
@@ -41,7 +52,20 @@
                 }else{
                     this.$router.push('/register');
                 }
+            },
+            ifUserLogin(){
+                userService.getIfUserLogin().then(res => {
+                    let data = res.data;
+                    this.userLogin = data.ifLogin;
+                    if (data.ifLogin){
+                        //已登录
+                        this.userInfo = data.data;
+                    }
+                });
             }
+        },
+        mounted() {
+            this.ifUserLogin();
         }
     }
 </script>
@@ -82,6 +106,17 @@
             }
             #register {
                 background-color: #2c9678;
+            }
+            .userInfo{
+                display: flex;
+                div{
+                    margin-top: 10px;
+                    margin-right: 10px;
+                    width: 40px;
+                    height: 40px;
+                    background-size: cover;
+                    border-radius: 50%;
+                }
             }
         }
         .n-m-nav{

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import userService from "../api/userService";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -36,7 +38,8 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: () => import('../views/About')
+    component: () => import('../views/About'),
+    meta: { requireBack: true }
   },
   {
     path: '/login',
@@ -52,6 +55,24 @@ const routes = [
 
 const router = new VueRouter({
   routes
+});
+
+//去登陆时留下信息
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireBack)) {
+    userService.getIfUserLogin().then(res => {
+      if (res.data.ifLogin){
+        next();
+      }else{
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath }
+        });
+      }
+    });
+  } else {
+    next() // 确保一定要调用 next()
+  }
 });
 
 export default router

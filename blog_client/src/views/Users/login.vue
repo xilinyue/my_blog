@@ -54,17 +54,29 @@
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
                         userService.loginUser(this.loginForm).then(res => {
-                            let data = res.data
+                            let data = res.data;
                             if (data.code !== 0) {
                                 this.$message({
                                     type: 'error',
                                     message: data.msg,
                                     duration: 2000
                                 });
+                            }else{
+                                this.$message({
+                                    type: 'success',
+                                    message: data.msg,
+                                    duration: 2000
+                                });
+                                console.log(this.$route.query);
+                                // this.$router.push('/blog/0')
+                                if(this.$route.query.redirect) {
+                                    this.$router.push(this.$route.query.redirect);
+                                }else{
+                                    this.$router.push("/blog/0")
+                                }
                             }
                         })
                     } else {
-
                         return false;
                     }
                 });

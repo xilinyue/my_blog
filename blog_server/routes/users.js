@@ -102,6 +102,29 @@ router.post('/login',(req,res) => {
             });
         })
 })
+//判断用户是否登录
+router.get('/ifLogin',(req,res) => {
+    let loginUser = req.session.userInfo;
+    if(!loginUser) {
+        res.send({
+            code: 0,
+            msg: '未登录',
+            ifLogin: false
+        });
+        return;
+    }
+    let userInfo = {
+        _id: loginUser._id,
+        username: loginUser.username,
+        avatar: loginUser.avatar
+    };
+    res.send({
+        code: 0,
+        msg: '用户已登录',
+        ifLogin: true,
+        data: userInfo
+    });
+})
 
 
 module.exports = router;

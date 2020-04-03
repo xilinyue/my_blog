@@ -16,5 +16,9 @@ export default {
     //用户登录接口
     loginUser(params) {
         return request.post('/api/user/login',params);
+    },
+    //判断用户是否登录接口
+    getIfUserLogin(){
+        return request.get('/api/user/ifLogin');
     }
 }
