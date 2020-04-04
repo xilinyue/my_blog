@@ -6,7 +6,7 @@ let articleSchema = new Schema({
     type: {type: String, required: true},
     title: {type: String, required: true},
     content: {type: String, required: true},
-    date: {type: Date, default: Date.now()},
+    date: {type: Date, default: Date.now},
     tag: {type: String, required: true},
     surface: {type: String, default: '/images/defaultSurface.png'},   //存储文章的图片，默认值
     pv: {type: Number, default: 0},

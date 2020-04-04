@@ -12,7 +12,7 @@
             <ul class="message-list">
                 <li class="message-item" v-for="(item,index) in commentList" :key="item._id">
                     <div class="p-u-info">
-                        <span class="img" :style="{'backgroundImage': 'url('+item.user.photo+')'}"></span>
+                        <span class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+item.user.avatar+'.jpg)'}"></span>
                         <span class="user">{{item.user.username}}</span>
                     </div>
                     <div class="content">
@@ -26,12 +26,12 @@
                     </div>
                     <ul class="sub-list">
                         <li class="sub-item" v-for="(childItem,childIndex) in item.children" :key="childIndex+Math.random()*100">
-                            <div class="img" :style="{'backgroundImage': 'url('+childItem.user.photo+')'}"></div>
+                            <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+childItem.user.avatar+'.jpg)'}"></div>
                             <div class="content">
                                 <div>
                                     <span class="name">{{childItem.user.username}}</span>
                                     <span>回复</span>
-                                    <span class="name">{{childItem.$username}}</span>
+                                    <span class="name">{{childItem.atUserName}}</span>
                                     <span class="content">{{childItem.content}}</span>
                                 </div>
                                 <div>
@@ -44,8 +44,8 @@
                         </li>
                     </ul>
                     <div :class="['reply',{'show': item.reply.ifShow}]">
-                        <textarea :placeholder="'回复【'+ item.reply.$username+'】'"></textarea>
-                        <el-button type="success" size="mini">提交</el-button>
+                        <textarea :placeholder="'回复【'+ item.reply.atUserName+'】'" v-model="item.reply.content"></textarea>
+                        <el-button type="success" size="mini" @click="submitSubMessage(index)">提交</el-button>
                     </div>
                 </li>
             </ul>
@@ -57,6 +57,7 @@
     import Nav from "../../components/Nav";
     import RichText from "../../components/RichText";
     import userService from "../../api/userService";
+    import messageService from "../../api/messageService";
     export default {
         name: "index",
         components: {
@@ -64,128 +65,7 @@
         },
         data() {
             return{
-                commentList : [
-                    {
-                        reply:{
-                            userId : "",//id
-                            content : "",//回复内容
-                            $username : "",//字符串
-                            date : "",//日期
-                            ifShow : false,
-                            lastIndexArr : []
-                        },
-                        _id:"11",
-                        user:{
-                            _id : "xxx",
-                            username : "阿飞",
-                            photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                        },
-                        content:"<p>11</p><p>22</p>",
-                        date : new Date()+"",
-                        children : [
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "花锎 俩团圜",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"这里的山路十八弯，这里的逗逼抱成团",
-                                $username : "阿飞",
-                                date : new Date()+""
-                            },
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "小胖纸",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"哈哈哈哈哈哈或",
-                                $username : "花锎 俩团圜",
-                                date : new Date()+""
-                            },
-                        ]
-                    },
-                    {
-                        reply:{
-                            userId : "",//id
-                            content : "",//回复内容
-                            $username : "",//字符串
-                            date : "",//日期
-                            ifShow : false,
-                            lastIndexArr : []
-                        },
-                        _id:"22",
-                        user:{
-                            _id : "xxx",
-                            username : "阿飞",
-                            photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                        },
-                        content:"<p>11</p><p>22</p>",
-                        date : new Date()+"",
-                        children : [
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "花锎 俩团圜",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"这里的山路十八弯，这里的逗逼抱成团",
-                                $username : "阿飞",
-                                date : new Date()+""
-                            },
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "小胖纸",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"哈哈哈哈哈哈或",
-                                $username : "花锎 俩团圜",
-                                date : new Date()+""
-                            },
-                        ]
-                    },
-                    {
-                        reply:{
-                            userId : "",//id
-                            content : "",//回复内容
-                            $username : "",//字符串
-                            date : "",//日期
-                            ifShow : false,
-                            lastIndexArr : []
-                        },
-                        _id:"33",
-                        user:{
-                            _id : "xxx",
-                            username : "阿飞",
-                            photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                        },
-                        content:"<p>11</p><p>22</p>",
-                        date : new Date()+"",
-                        children : [
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "花锎 俩团圜",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"这里的山路十八弯，这里的逗逼抱成团",
-                                $username : "阿飞",
-                                date : new Date()+""
-                            },
-                            {
-                                user:{
-                                    _id : "xxx",
-                                    username : "小胖纸",
-                                    photo : "http://localhost:3000/images/defaultAvatar.jpg"
-                                },
-                                content:"哈哈哈哈哈哈或",
-                                $username : "花锎 俩团圜",
-                                date : new Date()+""
-                            },
-                        ]
-                    }
-                ]
+                commentList : []
             }
         },
         filters: {
@@ -212,7 +92,49 @@
                     if (!data.ifLogin) {
                         layer.msg('清先登录', {icon: 2});
                     }else{
-                        // TODO 提交留言
+                        messageService.addMessage({userId: data.data._id, content: value}).then(res => {
+                            if (res.data.code === 0){
+                                layer.msg('回复留言成功', {icon: 1});
+                                //后续操作
+                                // TODO 需要清除内容并且重新获取留言列表，不想刷新整个页面
+                                setTimeout(function () {
+                                    window.location.reload()
+                                },1000)
+                            }else{
+                                layer.msg(res.data.msg, {icon: 2});
+                            }
+                        }).catch(err => {
+                            layer.msg('服务器错误~请稍后重试', {icon: 2});
+                        })
+                    }
+                });
+            },
+            submitSubMessage(pIndex){
+                //判断是否登录
+                userService.getIfUserLogin().then(res => {
+                    let data = res.data;
+                    if (!data.ifLogin) {
+                        layer.msg('清先登录', {icon: 2});
+                    }else{
+                        messageService.addSubMessage({
+                                parentId: this.commentList[pIndex]._id,
+                                userId: data.data._id,
+                                content: this.commentList[pIndex].reply.content,
+                                atUserName: this.commentList[pIndex].reply.atUserName}
+                            ).then(res => {
+                            if (res.data.code === 0){
+                                layer.msg('留言成功', {icon: 1});
+                                //后续操作
+                                // TODO 需要清除内容并且重新获取留言列表，不想刷新整个页面
+                                setTimeout(function () {
+                                    window.location.reload()
+                                },1000)
+                            }else{
+                                layer.msg(res.data.msg, {icon: 2});
+                            }
+                        }).catch(err => {
+                            layer.msg('服务器错误~请稍后重试', {icon: 2});
+                        })
                     }
                 })
             },
@@ -230,12 +152,35 @@
                 }
                 if (cIndex === undefined){
                     //不是点的子回复
-                    parentData.reply.$username = parentData.user.username;
+                    parentData.reply.atUserName = parentData.user.username;
                 }else{
                     //点的子回复
-                    parentData.reply.$username = parentData.children[cIndex].user.username
+                    parentData.reply.atUserName = parentData.children[cIndex].user.username
                 }
+            },
+            //获取列表数据
+            getMessageList() {
+                messageService.getMessageList().then(res => {
+                    let data = res.data;
+                    if (data.code ===0 ){
+                        //添加reply
+                        this.commentList = data.data.map(item => {
+                            item.reply = {
+                                userId : "",//id
+                                content : "",//回复内容
+                                atUserName : "",//字符串
+                                date : "",//日期
+                                ifShow : false,
+                                lastIndexArr : []
+                            };
+                            return item;
+                        });
+                    }
+                })
             }
+        },
+        mounted() {
+            this.getMessageList();
         }
     }
 </script>

@@ -49,6 +49,7 @@ app.use((req,res,next) => {
 app.use('', require('./routes/index'));
 app.use('/api/user', require('./routes/users'));
 app.use('/api/article', require('./routes/article'));
+app.use('/api/message',require('./routes/message'));
 
 module.exports = app;
 
