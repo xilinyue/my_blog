@@ -67,9 +67,8 @@
                                     message: data.msg,
                                     duration: 2000
                                 });
-                                // this.$router.push('/blog/0')
-                                if(this.$route.query.redirect) {
-                                    this.$router.push(this.$route.query.redirect);
+                                if(this.$route.query.returnURL) {
+                                    this.$router.push(this.$route.query.returnURL);
                                 }else{
                                     this.$router.push("/blog/0")
                                 }

@@ -12,5 +12,9 @@ export default {
     //获取留言数据
     getMessageList(skip=0,limit=5){
         return request.get("/api/message/getMessageList",{params: {skip,limit}});
+    },
+    //获取留言总条数
+    getCountMessage(){
+        return request.get("/api/message/getCountMessage");
     }
 }

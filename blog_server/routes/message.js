@@ -73,8 +73,6 @@ router.get('/getMessageList',(req,res) => {
     let {skip,limit} = req.query;
     skip = parseInt(skip) || 0;
     limit = parseInt(limit) || 5;
-    console.log(skip,limit);
-    console.log(typeof skip,typeof limit);
     messageModel.find({},{__v: 0},{skip,limit,sort: {date: -1}})
         .populate('user',{_id: 1, username: 1,avatar: 1})
         .populate('children.user',{_id: 1, username: 1,avatar: 1})
@@ -98,5 +96,20 @@ router.get('/getMessageList',(req,res) => {
             });
         })
 });
+//获取所有留言的总数
+router.get('/getCountMessage',(req,res) => {
+    messageModel.find({}).then(docs => {
+        res.send({
+            code: 0,
+            msg: '获取总数成功',
+            total: docs.length
+        })
+    }).catch(err => {
+        res.send({
+            code: 5,
+            msg: '服务器错误'
+        });
+    })
+})
 
 module.exports = router;

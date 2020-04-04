@@ -4,10 +4,16 @@
             <div class="n-m-logo">Mr.Gan</div>
             <div class="n-m-login">
                 <div v-if="userLogin">
-                    <div class="userInfo">
-                        <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+userInfo.avatar+'.jpg)'}"></div>
-                        <span>{{userInfo.username}}</span>
-                    </div>
+                    <el-dropdown @command="handleCommand">
+                        <div class="userInfo">
+                            <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+userInfo.avatar+'.jpg)'}"></div>
+                            <span>{{userInfo.username}}</span>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="editAvatar">修改头像</el-dropdown-item>
+                            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
                 </div>
                 <div v-else>
                     <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
@@ -62,6 +68,26 @@
                         this.userInfo = data.data;
                     }
                 });
+            },
+            //下拉框的触发事件
+            handleCommand(command) {
+                if (command === 'editAvatar'){
+                    console.log("修改头像")
+                }else if (command === 'logout'){
+                    userService.postUserLogout().then(res => {
+                        let data = res.data;
+                        if (data.code === 0){
+                            this.$message({
+                                type: 'success',
+                                message: data.msg,
+                                duration: 2000
+                            });
+                            setTimeout(function () {
+                                window.location.reload();
+                            },1000);
+                        }
+                    });
+                }
             }
         },
         mounted() {

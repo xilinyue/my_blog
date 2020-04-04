@@ -44,7 +44,11 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Users/login.vue')
+    component: () => import('../views/Users/login.vue'),
+    beforeEnter: (to, from, next) => {
+      to.query.returnURL = from.path;
+      next();
+    }
   },
   {
     path: '/register',

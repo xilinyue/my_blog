@@ -20,5 +20,9 @@ export default {
     //判断用户是否登录接口
     getIfUserLogin(){
         return request.get('/api/user/ifLogin');
+    },
+    //用户退出登录
+    postUserLogout(){
+        return request.post('/api/user/logout');
     }
 }

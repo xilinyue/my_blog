@@ -49,6 +49,17 @@
                     </div>
                 </li>
             </ul>
+            <div class="pagination">
+                <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="5"
+                        layout="sizes, prev, pager, next"
+                        :total="total">
+                </el-pagination>
+            </div>
         </div>
     </div>
 </template>
@@ -65,7 +76,11 @@
         },
         data() {
             return{
-                commentList : []
+                commentList : [],
+                currentPage: 1,
+                total: 0,
+                skip: 0,
+                limit: 5
             }
         },
         filters: {
@@ -94,7 +109,7 @@
                     }else{
                         messageService.addMessage({userId: data.data._id, content: value}).then(res => {
                             if (res.data.code === 0){
-                                layer.msg('回复留言成功', {icon: 1});
+                                layer.msg('留言成功', {icon: 1});
                                 //后续操作
                                 // TODO 需要清除内容并且重新获取留言列表，不想刷新整个页面
                                 setTimeout(function () {
@@ -160,7 +175,7 @@
             },
             //获取列表数据
             getMessageList() {
-                messageService.getMessageList().then(res => {
+                messageService.getMessageList(this.skip,this.limit).then(res => {
                     let data = res.data;
                     if (data.code ===0 ){
                         //添加reply
@@ -177,10 +192,29 @@
                         });
                     }
                 })
+            },
+            //获取留言总条数
+            getCountMessage() {
+              messageService.getCountMessage().then(res => {
+                  let data = res.data;
+                  if (data.code === 0){
+                      this.total = data.total;
+                  }
+              });
+            },
+            handleSizeChange(size){
+                this.limit = size;
+                this.skip = (this.currentPage-1)*this.limit;
+                this.getMessageList(this.skip,this.limit);
+            },
+            handleCurrentChange(currentPage){
+                this.skip = (currentPage-1)*this.limit;
+                this.getMessageList(this.skip,this.limit);
             }
         },
         mounted() {
             this.getMessageList();
+            this.getCountMessage();
         }
     }
 </script>
@@ -319,6 +353,13 @@
                     }
                 }
             }
+        }
+        > .pagination{
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            padding: 20px 0;
         }
     }
 }

@@ -101,7 +101,24 @@ router.post('/login',(req,res) => {
                 msg: '服务器错误'
             });
         })
-})
+});
+//用户退出登录
+router.post('/logout',(req,res) => {
+    let userInfo = req.session.userInfo;
+    if(!userInfo) {
+        res.send({
+            code: 1,
+            msg: '用户为登录'
+        });
+        return false;
+    }else{
+        delete req.session.userInfo;
+        res.send({
+            code: 0,
+            msg: '退出登录成功'
+        });
+    }
+});
 //判断用户是否登录
 router.get('/ifLogin',(req,res) => {
     let loginUser = req.session.userInfo;
@@ -124,7 +141,7 @@ router.get('/ifLogin',(req,res) => {
         ifLogin: true,
         data: userInfo
     });
-})
+});
 
 
 module.exports = router;
