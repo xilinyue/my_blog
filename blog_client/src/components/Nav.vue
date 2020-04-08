@@ -1,48 +1,54 @@
 <template>
-    <div id="nav">
-        <div class="nav-main">
-            <div class="n-m-logo">Mr.Gan</div>
-            <div class="n-m-login">
-                <div v-if="userLogin">
-                    <el-dropdown @command="handleCommand">
-                        <div class="userInfo">
-                            <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+userInfo.avatar+'.jpg)'}"></div>
-                            <span>{{userInfo.username}}</span>
-                        </div>
-                        <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="editAvatar">修改头像</el-dropdown-item>
-                            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </el-dropdown>
+    <div>
+        <div id="nav">
+            <div class="nav-main">
+                <div class="n-m-logo">Mr.Gan</div>
+                <div class="n-m-login">
+                    <div v-if="userLogin">
+                        <el-dropdown @command="handleCommand">
+                            <div class="userInfo">
+                                <div class="img" :style="{'backgroundImage': 'url('+userInfo.avatar+')'}"></div>
+                                <span>{{userInfo.username}}</span>
+                            </div>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="editAvatar">修改头像</el-dropdown-item>
+                                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </div>
+                    <div v-else>
+                        <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
+                        <el-button type="success" size="mini" id="register" @click="handleNavClick('register')">注册</el-button>
+                    </div>
                 </div>
-                <div v-else>
-                    <el-button type="primary" size="mini" id="login" @click="handleNavClick('login')">登录</el-button>
-                    <el-button type="success" size="mini" id="register" @click="handleNavClick('register')">注册</el-button>
+                <div class="n-m-nav">
+                    <ul :class="'list'+whichActive">
+                        <li><router-link to="/">首页</router-link></li>
+                        <li><router-link to="/blog/0">博客</router-link></li>
+                        <li><router-link to="/message">留言</router-link></li>
+                        <li><router-link to="/diary">日记</router-link></li>
+                        <li><router-link to="/links">友链</router-link></li>
+                        <li><router-link to="/about">关于</router-link></li>
+                    </ul>
                 </div>
-            </div>
-            <div class="n-m-nav">
-                <ul :class="'list'+whichActive">
-                    <li><router-link to="/">首页</router-link></li>
-                    <li><router-link to="/blog/0">博客</router-link></li>
-                    <li><router-link to="/message">留言</router-link></li>
-                    <li><router-link to="/diary">日记</router-link></li>
-                    <li><router-link to="/links">友链</router-link></li>
-                    <li><router-link to="/about">关于</router-link></li>
-                </ul>
             </div>
         </div>
+        <Avatar :dialogVisible="dialogVisible" @closeAvatar="closeAvatar"></Avatar>
     </div>
 </template>
 
 <script>
     import userService from "../api/userService";
+    import Avatar from "./Avatar";
     export default {
         name: "Nav",
+        components: {Avatar},
         data() {
             return{
                 routerList: ['Home','Blog','Message','Diary','Links','About'],
                 userLogin: false,
-                userInfo: null
+                userInfo: null,
+                dialogVisible: false
             }
         },
         computed: {
@@ -75,7 +81,7 @@
             //下拉框的触发事件
             handleCommand(command) {
                 if (command === 'editAvatar'){
-                    console.log("修改头像")
+                    this.dialogVisible = true;
                 }else if (command === 'logout'){
                     userService.postUserLogout().then(res => {
                         let data = res.data;
@@ -91,6 +97,11 @@
                         }
                     });
                 }
+            },
+
+            //修改头像
+            closeAvatar(){
+                this.dialogVisible = false;
             }
         },
         mounted() {

@@ -12,7 +12,7 @@
             <ul class="message-list">
                 <li class="message-item" v-for="(item,index) in commentList" :key="item._id">
                     <div class="p-u-info">
-                        <span class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+item.user.avatar+'.jpg)'}"></span>
+                        <span class="img" :style="{'backgroundImage': 'url('+item.user.avatar+')'}"></span>
                         <span class="user">{{item.user.username}}</span>
                     </div>
                     <div class="content">
@@ -26,7 +26,7 @@
                     </div>
                     <ul class="sub-list">
                         <li class="sub-item" v-for="(childItem,childIndex) in item.children" :key="childIndex+Math.random()*100">
-                            <div class="img" :style="{'backgroundImage': 'url(http://localhost:3000'+childItem.user.avatar+'.jpg)'}"></div>
+                            <div class="img" :style="{'backgroundImage': 'url('+childItem.user.avatar+')'}"></div>
                             <div class="content">
                                 <div>
                                     <span class="name">{{childItem.user.username}}</span>

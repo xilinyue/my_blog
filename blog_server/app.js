@@ -50,6 +50,7 @@ app.use('', require('./routes/index'));
 app.use('/api/user', require('./routes/users'));
 app.use('/api/article', require('./routes/article'));
 app.use('/api/message',require('./routes/message'));
+app.use('/api/upload',require('./routes/upload'));
 
 module.exports = app;
 

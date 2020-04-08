@@ -24,5 +24,10 @@ export default {
     //用户退出登录
     postUserLogout(){
         return request.post('/api/user/logout');
+    },
+
+    //获取游客信息
+    getVisitorList(){
+        return request.get('/api/user/getVisitorList');
     }
 }

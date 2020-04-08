@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const userModel =  require('../db/userModel');
+const visitorModel =  require('../db/visitorModel');
 
 //用户注册
 router.post('/addUser',(req,res) => {
@@ -94,6 +95,18 @@ router.post('/login',(req,res) => {
                     code: 0,
                     msg: '登录成功'
                 });
+                //将用户信息存到有课表中
+                //首先判断该游客是否已存在，存在就将信息删除再存入新的，不存在就直接存入
+                visitorModel.findOne({username: username}).then(doc1 => {
+                    if(doc1) {
+                        //存在先删除
+                        visitorModel.deleteMany({username}).then().catch(err => {
+
+                        })
+                    }
+                    //存入信息
+                    visitorModel.create({username: username,avatar: doc.avatar})
+                })
             }
         }).catch(e => {
             res.send({
@@ -140,6 +153,23 @@ router.get('/ifLogin',(req,res) => {
         msg: '用户已登录',
         ifLogin: true,
         data: userInfo
+    });
+});
+
+//获取游客信息
+router.get('/getVisitorList',(req,res) => {
+    visitorModel.find({},{__v: 0},{skip: 0,limit: 12,sort: {date: -1}}).then(doc => {
+        res.send({
+            code: 0,
+            msg: '数据获取成功',
+            data: doc
+        });
+    }).catch(err => {
+        res.send({
+            code: 5,
+            msg: '服务器错误',
+            data: []
+        })
     });
 });
 

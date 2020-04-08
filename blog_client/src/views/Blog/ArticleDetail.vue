@@ -50,7 +50,7 @@
             </div>
             <ul class="comment-list">
                 <li class="comment-item" v-for="(item,index) in commentList" :key="item._id">
-                    <div class="p-avatar" :style="{'backgroundImage': 'url(http://localhost:3000'+item.user.avatar+'.jpg)'}"></div>
+                    <div class="p-avatar" :style="{'backgroundImage': 'url('+item.user.avatar+')'}"></div>
                     <div class="main-info">
                         <div class="p-username">{{item.user.username}}</div>
                         <div class="p-content" v-html="item.content">
@@ -63,7 +63,7 @@
                         </div>
                         <ul class="sub-list">
                             <li class="sub-item" v-for="(subItem,childIndex) in item.children">
-                                <div class="sub-avatar" :style="{'backgroundImage': 'url(http://localhost:3000'+subItem.user.avatar+'.jpg)'}"></div>
+                                <div class="sub-avatar" :style="{'backgroundImage': 'url('+subItem.user.avatar+')'}"></div>
                                 <div>
                                     <div class="sub-info">
                                         <span>{{subItem.user.username}}</span>

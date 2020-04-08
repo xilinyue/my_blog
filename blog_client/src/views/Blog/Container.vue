@@ -7,8 +7,11 @@
             <el-aside>
                 <div class="search" :class="{'fixed-active': isHasFixed}">
                     <div class="search-main">
-                        <input type="text" placeholder="请输入搜索内容" />
+                        <input type="text" placeholder="请输入搜索内容" v-model="keyWords" @input="getSearchListByTitleOrTag"/>
                         <i class="el-icon-search"></i>
+                        <ul class="search" v-if="searchList.length > 0">
+                            <li v-for="item in searchList" @click="toArticleDetail(item._id)">{{item.title}}</li>
+                        </ul>
                     </div>
                     <div class="search-article">
                         <ul @mouseleave="handleMouseLeave">
@@ -41,7 +44,7 @@
                 <div class="visitor">
                     <h2>最近访客</h2>
                     <ul>
-                        <li v-for="(item,index) in visitorList" :style="{backgroundImage: `url(http://localhost:3000${item.photo})`}">
+                        <li v-for="(item,index) in visitorList" :style="{backgroundImage: `url(http://localhost:3000${item.avatar}.jpg)`}">
                             <span>{{item.username}}</span>
                         </li>
                     </ul>
@@ -54,6 +57,7 @@
 <script>
     import articleService from "../../api/articleService";
     import ArticleList from "./ArticleList";
+    import userService from "../../api/userService";
     export default {
         name: "Container",
         components: {
@@ -67,29 +71,21 @@
                 articleTypeList: ['全部文章','个人日记','HTML5&CSS3','JavaScript','Vue&Node','其他'],
                 coverTop: this.$route.params.id,
                 hotArticleList: [{title: ''}],
-                visitorList: [
-                    {photo: '/images/defaultSurface.png',username: '小钰'},
-                    {photo: '/images/defaultSurface.png',username: '西林月'},
-                    {photo: '/images/defaultSurface.png',username: '流苏'},
-                    {photo: '/images/defaultSurface.png',username: '青蛇'},
-                    {photo: '/images/defaultSurface.png',username: '醉拳'},
-                    {photo: '/images/defaultSurface.png',username: '梦游小子'},
-                    {photo: '/images/defaultSurface.png',username: '梦里生'},
-                    {photo: '/images/defaultSurface.png',username: '轮回'},
-                    {photo: '/images/defaultSurface.png',username: '青釉'},
-                    {photo: '/images/defaultSurface.png',username: '迷彩'},
-                    {photo: '/images/defaultSurface.png',username: '心幽'},
-                    {photo: '/images/defaultSurface.png',username: '胖迪'},
-                ]
+                visitorList: [],
+                //搜索用
+                keyWords: '',
+                searchList: [],
+                searchTimer: null
             }
         },
         created() {
             this.getArticleInfo();
             this.getArticleHot();
+            this.getVisitorList();
         },
         mounted() {
             //监听window的滚动事件
-            window.addEventListener('scroll',this.handleScroll)
+            window.addEventListener('scroll',this.handleScroll);
         },
         methods: {
             toArticleDetail(id) {
@@ -130,6 +126,31 @@
                     this.hotArticleList = data.data;
                 }
             },
+
+            //获取搜索列表
+            getSearchListByTitleOrTag() {
+                clearTimeout(this.searchTimer);
+                this.searchTimer = setTimeout(() => {
+                    let keyword = this.keyWords.trim();
+                    // 发起axios请求
+                    if (keyword) {
+                        articleService.getSearchListByTitleOrTag(keyword).then(res => {
+                            let data = res.data;
+                            if (data.code === 0) {
+                                this.searchList = data.data;
+                            }
+                        })
+                    }else{
+                        this.searchList = []
+                    }
+                },1000)
+            },
+            getVisitorList(){
+                userService.getVisitorList().then(res=>{
+                   let data =  res.data;
+                   this.visitorList = data.data;
+                });
+            }
         },
         computed: {
             //计算置顶推荐文章
@@ -177,6 +198,8 @@
                         padding: 20px;
                         background-color: #36282b;
                         input{
+                            position: relative;
+                            z-index: 3;
                             width: 100%;
                             height: 40px;
                             border-radius: 20px;
@@ -186,6 +209,7 @@
                         }
                         i{
                             position: absolute;
+                            z-index: 3;
                             top: 29px;
                             right: 35px;
                             width: 22px;
@@ -198,6 +222,27 @@
                             cursor: pointer;
                             &:hover{
                                 color: #f07c82;
+                            }
+                        }
+                        ul{
+                            position: absolute;
+                            z-index: 2;
+                            top: 43px;
+                            width: 260px;
+                            background-color: #fff;
+                            padding-top: 20px;
+                            border-bottom-left-radius: 20px;
+                            border-bottom-right-radius: 20px;
+                            li{
+                                width: 100%;
+                                box-sizing: border-box;
+                                padding-left: 10px;
+                                height: 40px;
+                                line-height: 40px;
+                                cursor: pointer;
+                                &:hover{
+                                    background-color: #ddd;
+                                }
                             }
                         }
                     }

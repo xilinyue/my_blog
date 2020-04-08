@@ -191,7 +191,7 @@ router.post('/addArticleSubCommentById',(req,res) => {
         })
 });
 
-//根据文章id获取文章的信息
+//根据文章id获取文章的评论信息
 router.get('/getArticleCommentByArticleId',(req,res) => {
     let {articleId,skip,limit} = req.query;
     if(!articleId) {
@@ -222,7 +222,34 @@ router.get('/getArticleCommentByArticleId',(req,res) => {
                 })
             }
         })
-})
+});
+
+//根据文章标题和tag搜索文章
+router.get('/getSearchListByTitleOrTag',(req,res) => {
+    let {keyWords} = req.query;
+    let reg = new RegExp(keyWords,'i');
+    articelModel.find({$or: [{title: reg}, {tag: reg}]},{_id: 1,title: 1},{skip: 0,limit: 5,sort: {pv: -1}}).then(docs => {
+        if(docs.length > 0){
+            res.send({
+                code: 0,
+                msg: '数据获取成功',
+                data: docs
+            })
+        }else{
+            res.send({
+                code: 1,
+                msg: '数据为空',
+                data: []
+            })
+        }
+    }).catch(err => {
+        res.send({
+            code: 5,
+            msg: '服务器错误',
+            data: []
+        })
+    });
+});
 
 
 
