@@ -3,30 +3,16 @@
         <Nav></Nav>
             <h3>众里寻他千百度，那人却在灯火阑珊处</h3>
             <el-timeline>
-                <el-timeline-item timestamp="2018/4/12" placement="top">
+                <el-timeline-item timestamp="2018/4/12" placement="top"
+                    v-for="item in diaryList" :key="item._id">
                     <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/12 20:46</p>
-                        <img src="../../assets/img/bg.jpg">
-                    </el-card>
-                </el-timeline-item>
-                <el-timeline-item timestamp="2018/4/3" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/3 20:46</p>
-                    </el-card>
-                </el-timeline-item>
-                <el-timeline-item timestamp="2018/4/2" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/2 20:46</p>
-                    </el-card>
-                </el-timeline-item>
-                <el-timeline-item timestamp="2018/4/1" placement="top">
-                    <el-card>
-                        <h4>更新 Github 模板</h4>
-                        <p>王小虎 提交于 2018/4/12 20:46</p>
-                        <img src="../../assets/img/bg.jpg">
+                        <h4>{{item.title}}</h4>
+                        <div v-html="item.content" class="content"></div>
+                        <ul v-if="item.imgArr.length > 0">
+                            <li v-for="imgSrc in item.imgArr">
+                                <img :src="imgSrc" alt="">
+                            </li>
+                        </ul>
                     </el-card>
                 </el-timeline-item>
             </el-timeline>
@@ -40,6 +26,29 @@
         name: "index",
         components: {
             Nav
+        },
+        data() {
+            return{
+                diaryList: [
+                    {
+                        _id: '11111',
+                        title: '这是假数据',
+                        date: '2020/4/18',
+                        content: '<p>asfdsafsa</p>',
+                        imgArr: [
+                            'http://localhost:3000/images/defaultSurface.png','http://localhost:3000/images/defaultSurface.png'
+                        ],
+                    },{
+                        _id: '2222',
+                        title: '这是假数据',
+                        date: '2020/4/18',
+                        content: '<p>asfdsafsa</p>',
+                        imgArr: [
+                            'http://localhost:3000/images/defaultSurface.png','http://localhost:3000/images/defaultSurface.png'
+                        ],
+                    }
+                ]
+            }
         }
     }
 </script>
@@ -80,14 +89,24 @@
                         font-size: 18px;
                         margin-bottom: 10px;
                     }
-                    p{
-                        color: #000;
+                    .content{
+                        color: #fff;
                         font-size: 16px;
                         margin-bottom: 10px;
+                        p{
+                            text-indent: 2em;
+                        }
                     }
-                    img{
-                        width: 50%;
-                        height: 300px;
+                    ul{
+                        display: flex;
+                        flex-wrap: wrap;
+                        li{
+                            margin-bottom: 5px;
+                            margin-right: 10px;
+                            img{
+                                height: 300px;
+                            }
+                        }
                     }
                 }
                 > p{

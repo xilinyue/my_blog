@@ -67,7 +67,10 @@ router.get('/getArticleList',(req,res) => {
             })
         });
 });
-//根据_id获取文章信息
+/*
+* 根据_id获取文章信息
+* 同时更新文章的阅读量
+* */
 router.get('/getArticleDetailById',(req,res) => {
     let {id} = req.query;
     if(!id) {
@@ -90,6 +93,10 @@ router.get('/getArticleDetailById',(req,res) => {
             msg: '数据获取成功',
             data
         });
+        //返回成功的同时更新本条数据的pv阅读量
+        articelModel.updateOne({_id: id},{$inc:{pv:1}}).then(docs => {
+            console.log(docs);
+        })
     }).catch(err => {
         res.send({
             code: 5,

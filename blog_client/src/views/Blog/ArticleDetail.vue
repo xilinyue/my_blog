@@ -41,7 +41,11 @@
             </div>
             <div class="operation">
                 <ul>
-                    <li></li>
+                    <li>
+                        <span></span>
+                    </li>
+                    <li><span></span></li>
+                    <li><span></span></li>
                 </ul>
             </div>
             <div class="comment">
@@ -384,10 +388,46 @@
             padding: 25px;
             border-top: 1px solid #eee;
             border-bottom: 1px solid #eee;
-            height: 110px;
             ul{
-                width: 350px;
+                width: 300px;
                 margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                li{
+                    width: 60px;
+                    height: 60px;
+                    box-sizing: border-box;
+                    text-align: center;
+                    line-height: 85px;
+                    cursor: pointer;
+                    border-radius: 50%;
+                    span{
+                        display: inline-block;
+                        width: 40px;
+                        height: 40px;
+                    }
+                    &:hover span{
+                        opacity: .6;
+                    }
+                }
+                li:nth-child(1){
+                    border: 2px solid #5AC64F;
+                }
+                li:nth-child(1) span{
+                    background: url('../../assets/img/shareicon.png') no-repeat 0 0/ cover;
+                }
+                li:nth-child(2){
+                    border: 2px solid #FF7171;
+                }
+                li:nth-child(2) span{
+                    background: url('../../assets/img/shareicon.png') no-repeat center / cover;
+                }
+                li:nth-child(3){
+                    border: 2px solid #4CAFE9;
+                }
+                li:nth-child(3) span{
+                    background: url('../../assets/img/qq.png') no-repeat center / cover;
+                }
             }
         }
         > .comment{
