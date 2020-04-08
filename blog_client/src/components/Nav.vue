@@ -48,6 +48,9 @@
         computed: {
             whichActive() {
                 let index = this.routerList.indexOf(this.$route.name);
+                if (this.$route.name === "ArticleDetail"){
+                    index = 1;
+                }
                 return index + 1;
             }
         },

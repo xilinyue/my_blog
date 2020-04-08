@@ -1,6 +1,7 @@
 const express = require('express');
 const articelModel = require('../db/articleModel');
 const articelInfoModel = require('../db/articleInfoModel');
+const commentModel = require('../db/commentModel');
 
 let router = express.Router();
 
@@ -65,6 +66,162 @@ router.get('/getArticleList',(req,res) => {
                 data: null
             })
         });
+});
+//根据_id获取文章信息
+router.get('/getArticleDetailById',(req,res) => {
+    let {id} = req.query;
+    if(!id) {
+        res.send({
+            code: 4,
+            msg: '参数必须',
+        });
+        return false;
+    }
+    articelModel.findOne({_id: id},{__v: 0}).then(data => {
+        if(!data) {
+            res.send({
+                code: 1,
+                msg: '未找到数据'
+            });
+            return false;
+        }
+        res.send({
+            code: 0,
+            msg: '数据获取成功',
+            data
+        });
+    }).catch(err => {
+        res.send({
+            code: 5,
+            msg: '服务器错误'
+        })
+    })
+});
+//延伸阅读
+router.get('/getArticleListExtend',(req,res) => {
+    let {tag} = req.query;
+    articelModel.find({tag},{_id: 1,title: 1},{skip: 1, limit: 2,sort: {pv: -1}})
+        .then(docs => {
+            if(docs.length > 0){
+                res.send({
+                    code: 0,
+                    msg: '数据获取成功',
+                    data: docs
+                });
+            }else{
+                res.send({
+                    code: 1,
+                    msg: '暂无数据',
+                    data: []
+                });
+            }
+        }).catch(err => {
+            res.send({
+                code: 5,
+                msg: '服务器错误'
+            });
+        })
+});
+
+//上传用户对文章的评论
+router.post('/addArticleCommentById',(req,res) => {
+    let {articleId,userId,content} = req.body;
+    if(!articleId || !userId || !content){
+        res.send({
+            code: 4,
+            msg: '参数不能为空'
+        });
+        return false
+    }
+    articelModel.findOne({_id: articleId}).then(data => {
+        if(data){
+            commentModel.create({user: userId,content}).then(data => {
+                let commentId = data._id;
+                //将commentId更新到article中
+                articelModel.updateOne({_id: articleId},{$push: {'comment': commentId}})
+                    .then(doc => {
+                        res.send({
+                            code: 0,
+                            msg: '评论成功'
+                        })
+                    }).catch(err => {
+                        res.send({
+                            code: 5,
+                            msg: '服务器错误'
+                        })
+                    })
+            })
+        }else{
+            res.send({
+                code: 1,
+                msg: '该条博客不存在'
+            })
+        }
+    }).catch(err => {
+        res.send({
+            code: 5,
+            msg: '服务器错误'
+        });
+    })
+
+});
+
+//上传文章的子评论
+router.post('/addArticleSubCommentById',(req,res) => {
+    let {commentId,userId,content,atUserName} = req.body;
+    if(!commentId || !userId || !content || !atUserName) {
+        res.send({
+            code: 4,
+            msg: '参数不能为空'
+        });
+        return false;
+    }
+    //更新数据
+    commentModel.update({_id: commentId},{$push: {'children': {user: userId,content,atUserName}}})
+        .then(docs => {
+            res.send({
+                code: 0,
+                msg: '评论成功'
+            });
+        }).catch(err => {
+            res.send({
+                code: 5,
+                msg: '服务器错误'
+            });
+        })
+});
+
+//根据文章id获取文章的信息
+router.get('/getArticleCommentByArticleId',(req,res) => {
+    let {articleId,skip,limit} = req.query;
+    if(!articleId) {
+        res.send({
+            code: 4,
+            msg: '参数不能为空'
+        });
+        return false;
+    }
+    skip = skip || 0;
+    limit = limit || 5;
+    articelModel.findOne({_id: articleId},{comment: 1})
+        .populate({
+            path: 'comment',
+            populate: [{
+                path: 'user',
+                select: {_id: 1,username: 1,avatar: 1}
+            },{path: 'children.user',select: {_id: 1,username: 1,avatar: 1}}]
+        })
+        .then(data => {
+            if(data){
+                res.send(data);
+            }else{
+                res.send({
+                    code: 0,
+                    msg: '数据不存在',
+                    data
+                })
+            }
+        })
 })
 
 

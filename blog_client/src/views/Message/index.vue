@@ -7,7 +7,7 @@
                     <h1>留言板</h1>
                     <p>您的建议让网站得到优化！！！</p>
                 </div>
-                <RichText @Sub="submitMessage"></RichText>
+                <RichText @Sub="submitMessage" ></RichText>
             </div>
             <ul class="message-list">
                 <li class="message-item" v-for="(item,index) in commentList" :key="item._id">

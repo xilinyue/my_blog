@@ -4,7 +4,7 @@
         <div class="list-item" v-for="(item,index) in articleList" :key="item._id" :class="{'top-one': index === 0}">
             <h5>
                 <span>【{{item.type}}】</span>
-                <a href="">{{item.title}}</a>
+                <router-link :to="'/articleDetail/'+item._id">{{item.title}}</router-link>
             </h5>
             <div class="time">
                 <span class="date">{{item.date | date}}</span>
@@ -22,7 +22,7 @@
                 {{item.content.substring(0,50)}}
             </div>
             <div class="read-more">
-                <a href="javascript:;">继续阅读</a>
+                <router-link :to="'/articleDetail/'+item._id">继续阅读</router-link>
             </div>
             <aside>
                 <div>
@@ -119,8 +119,14 @@
             },
             getArticleList() {
                 articleService.getArticleList(this.query).then(res => {
-                    let data = res.data.data;
-                    this.articleList = data;
+                    let data = res.data;
+                    if (data.code === 0){
+                        this.articleList = data.data;
+                    }else{
+                        this.$router.push('/notfound');
+                    }
+                }).catch(err => {
+                    this.$router.push('/notfound');
                 });
             }
         }

@@ -23,7 +23,7 @@
                 <div class="hot">
                     <h2>热门文章</h2>
                     <ul>
-                        <li v-for="(item,index) in hotArticleList" :key="index">
+                        <li v-for="(item,index) in hotArticleList" :key="index" @click="toArticleDetail(item._id)">
                             <span :class="[{first: index === 0},{second: index === 1},{third: index === 2}]">{{index+1}}</span>
                             <span>{{item.title}}</span>
                         </li>
@@ -32,9 +32,9 @@
                 <div class="recommend">
                     <h2>置顶推荐</h2>
                     <ul>
-                        <li v-for="(item,index) in getArticleRecommend" :key="index">
+                        <li v-for="(item,index) in getArticleRecommend" :key="index" @click="toArticleDetail(item._id)">
                             <span :class="{first: index === 0}">{{index+1}}</span>
-                            <span>{{item.title}}</span>
+                            <span >{{item.title}}</span>
                         </li>
                     </ul>
                 </div>
@@ -92,6 +92,9 @@
             window.addEventListener('scroll',this.handleScroll)
         },
         methods: {
+            toArticleDetail(id) {
+                this.$router.push("/articleDetail/" + id);
+            },
             handleMouseenter(index) {
                 this.coverTop = index;
             },
