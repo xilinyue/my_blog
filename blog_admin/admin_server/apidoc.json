@@ -1,0 +1,7 @@
+{
+  "name": "MyBlog Admin",
+  "version": "0.1.0",
+  "description": "MyBlog 后台管理系统api文档",
+  "title": "后台管理系统api文档",
+  "url" : "https://localhost:3001"
+}

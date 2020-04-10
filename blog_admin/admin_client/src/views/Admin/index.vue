@@ -38,6 +38,7 @@
             line-height: 50px;
             text-align: center;
             border-bottom: 1px solid #eee;
+            font-family: Kaiti;
         }
     }
     .el-main{
