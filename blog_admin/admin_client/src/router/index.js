@@ -16,11 +16,14 @@ const routes = [
         path: '',
         name: 'AdminWelcome',
         component: () => import('../views/Admin/Welcome/index')
-      },
-      {
+      },{
         path: 'blogManage',
         name: 'BlogManage',
         component: () => import('../views/Admin/Blog/BlogManage')
+      },{
+        path: 'blog/:id',
+        name: 'AddAndEditBlog',
+        component: () => import('../views/Admin/Blog/BlogEditAndAdd')
       },{
         path: 'tagManage',
         name: 'TagManage',

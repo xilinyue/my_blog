@@ -46,7 +46,7 @@ app.use((req,res,next) => {
 });
 
 //子路由
-// app.use('/api/article',require('./routes/article'));  //文章相关路由
+app.use('/api/article',require('./routes/article'));  //文章相关路由
 app.use('/api/articleInfo',require('./routes/articleInfo')); //文章信息相关路由
 
 module.exports = app;

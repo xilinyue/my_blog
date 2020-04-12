@@ -35,7 +35,7 @@
                 <div class="hot-list loading" ref="hotList">
                     <div class="hot-item" v-for="item in hotList">
                         <div class="img">
-                            <div class="bgImg" :style="{backgroundImage:'url(http://localhost:3000'+item.surface+')'}"></div>
+                            <div class="bgImg" :style="{backgroundImage:'url('+item.surface+')'}"></div>
                             <div class="link">
                                 <a href=""><i class="el-icon-link"></i></a>
                             </div>
@@ -43,7 +43,7 @@
                         <div class="info">
                             <div class="title">{{item.title}}</div>
                             <div class="time">{{item.date}}</div>
-                            <div class="abstract">{{item.content}}</div>
+                            <div class="abstract">{{item.abstract}}</div>
                             <a href="" class="link">阅读更多</a>
                         </div>
                     </div>
@@ -127,10 +127,7 @@
                     let data = res.data;
                     if (data.code === 0){
                         let list = data.data.slice(0,3);
-                        this.hotList = list.map(item => {
-                            item.content = item.content.substring(0,50);
-                            return item;
-                        })
+                        this.hotList = list;
                     }
                 })
             }

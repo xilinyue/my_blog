@@ -25,7 +25,7 @@ router.get('/getArticleInfo',(req,res) => {
 });
 //根据浏览量获取8篇热门文章
 router.get('/getArticleHot',(req,res) => {
-    articelModel.find({},{__v:0},{sort: {pv: -1}, skip: 0, limit: 8})
+    articelModel.find({},{__v:0,contentMarkdown: 0},{sort: {pv: -1}, skip: 0, limit: 8})
         .then(data => {
             res.send({
                 code: 0,
@@ -52,7 +52,7 @@ router.get('/getArticleList',(req,res) => {
     limit = parseInt(limit);
     skip = parseInt(skip);
     let options = tag?{tag}:{};
-    articelModel.find(options,{__v: 0},{skip,limit,sort: {pv: -1}})    // TODO之后将sort换成date
+    articelModel.find(options,{__v: 0,contentMarkdown: 0},{skip,limit,sort: {pv: -1}})    // TODO之后将sort换成date
         .then(data => {
             res.send({
                 code: 0,
@@ -80,7 +80,7 @@ router.get('/getArticleDetailById',(req,res) => {
         });
         return false;
     }
-    articelModel.findOne({_id: id},{__v: 0}).then(data => {
+    articelModel.findOne({_id: id},{__v: 0,contentMarkdown: 0}).then(data => {
         if(!data) {
             res.send({
                 code: 1,

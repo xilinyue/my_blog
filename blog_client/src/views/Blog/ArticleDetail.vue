@@ -20,8 +20,8 @@
                         </div>
                     </div>
                     <div class="content">
-                    {{articleInfo.content}}
-                </div>
+                        <MarkdownPreview  :initialValue="articleInfo.content" />
+                    </div>
                 </div>
                 <div class="no-data" v-else>暂无数据</div>
                 <div class="description">
@@ -99,13 +99,14 @@
 
 <script>
     import Nav from "../../components/Nav";
+    import {MarkdownPreview } from 'vue-meditor';
     import RichText from "../../components/RichText";
     import articleService from "../../api/articleService";
     import userService from "../../api/userService";
     export default {
         name: "ArticleDetail",
         components: {
-            Nav,RichText
+            Nav,RichText,MarkdownPreview
         },
         data(){
             return{

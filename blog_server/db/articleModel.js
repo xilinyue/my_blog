@@ -5,7 +5,9 @@ let Schema = mongoose.Schema;
 let articleSchema = new Schema({
     type: {type: String, required: true},
     title: {type: String, required: true},
+    abstract: {type: String, required: true}, //文章概要
     content: {type: String, required: true},
+    contentMarkdown: {type: String, required: true},
     date: {type: Date, default: Date.now},
     updateDate: {type: Date,default: Date.now},
     tag: {type: String, required: true},
@@ -14,11 +16,6 @@ let articleSchema = new Schema({
     comment: [
         {type: Schema.Types.ObjectId, ref: 'comment'}
     ]
-});
-
-articleSchema.pre('update',(next) => {
-    this.updateDate = new Date;
-    next();
 });
 
 let articleModel = mongoose.model('article',articleSchema);

@@ -2,10 +2,11 @@
     <div>
         <el-menu
                 class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose"
+                ref="menu"
                 :router="true"
-                :unique-opened="true">
+                :unique-opened="true"
+                :default-active="defaultActive"
+        >
             <el-submenu index="Blog">
                 <template slot="title">
                     <i class="el-icon-tickets"></i>
@@ -50,11 +51,26 @@
     export default {
         name: "AsideMenu",
         data() {
-            return{}
+            return{
+                defaultActive: ''
+            }
         },
         methods: {
-            handleOpen() {},
-            handleClose() {}
+            changeDefaultActive() {
+                if (this.$route.path.startsWith('/admin/blog/')){
+                    this.defaultActive = '/admin/blogManage';
+                    return;
+                }
+                this.defaultActive = this.$route.path;
+            }
+        },
+        created() {
+            this.changeDefaultActive();
+        },
+        watch: {
+            $route() {
+                this.changeDefaultActive()
+            }
         }
     }
 </script>

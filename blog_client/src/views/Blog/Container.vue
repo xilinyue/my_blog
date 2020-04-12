@@ -44,7 +44,7 @@
                 <div class="visitor">
                     <h2>最近访客</h2>
                     <ul>
-                        <li v-for="(item,index) in visitorList" :style="{backgroundImage: `url(http://localhost:3000${item.avatar}.jpg)`}">
+                        <li v-for="(item,index) in visitorList" :style="{backgroundImage: `url(${item.avatar})`}">
                             <span>{{item.username}}</span>
                         </li>
                     </ul>

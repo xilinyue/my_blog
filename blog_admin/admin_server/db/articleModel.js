@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const articleInfoModel = require("./articleInfoModel");
 
 let Schema = mongoose.Schema;
 
@@ -7,6 +8,7 @@ let articleSchema = new Schema({
     title: {type: String, required: true},
     abstract: {type: String, required: true}, //文章概要
     content: {type: String, required: true},
+    contentMarkdown: {type: String, required: true},
     date: {type: Date, default: Date.now},
     updateDate: {type: Date,default: Date.now},
     tag: {type: String, required: true},
@@ -16,6 +18,21 @@ let articleSchema = new Schema({
         {type: Schema.Types.ObjectId, ref: 'comment'}
     ]
 });
+
+//新增博客时更新articleInfo中的num
+articleSchema.pre("save",function(next){
+    //保存的时候，更新articleInfo表
+    articleInfoModel.findOne({})
+      .then(data=>{
+        if (data){
+          //如果已经存在了data 更新num
+          articleInfoModel
+            .updateOne({},{$inc:{num:1}})
+            .then(d=>{}).catch(e=>{})
+        }
+      })
+    next();
+  });
 
 articleSchema.pre('update',(next) => {
     this.updateDate = new Date;

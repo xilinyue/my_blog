@@ -16,10 +16,10 @@
             </div>
             <div class="content">
                 <a href="javascript:;" class="cover">
-                    <img :src="'http://localhost:3000/'+item.surface">
+                    <img :src="item.surface">
                     <div class="shadow"></div>
                 </a>
-                {{item.content.substring(0,50)}}
+                {{item.abstract}}
             </div>
             <div class="read-more">
                 <router-link :to="'/articleDetail/'+item._id">继续阅读</router-link>
@@ -55,11 +55,13 @@
                 query: {
                     index: this.$route.params.id,
                     skip: 0,
-                    limit: 5
+                    limit: 5,
+                    tag: ''
                 },
                 articleList: [],
                 ifNoMore: false,
-                ifLoading: false
+                ifLoading: false,
+                tagList: []
             }
         },
         filters: {
@@ -92,7 +94,7 @@
         },
         mounted() {
             this.getArticleList();
-
+            this.getArticleInfo();
             //监听窗口滚动
             window.addEventListener('scroll',this.handleScroll);
         },
@@ -118,6 +120,8 @@
                 }
             },
             getArticleList() {
+                this.query.tag = this.tagList[parseInt(this.query.index)];
+                console.log(this.query);
                 articleService.getArticleList(this.query).then(res => {
                     let data = res.data;
                     if (data.code === 0){
@@ -128,7 +132,16 @@
                 }).catch(err => {
                     this.$router.push('/notfound');
                 });
-            }
+            },
+            //获取文章信息
+            async getArticleInfo() {
+                let res = await articleService.getArticleInfo();
+                let data = res.data;
+                if (data.code === 0){
+                    this.tagList = data.data.tags;
+                    this.tagList.unshift('');
+                }
+            },
         }
     }
 </script>
