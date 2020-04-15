@@ -4,7 +4,8 @@
         <el-button type="primary" @click="toAddBlog">添加博客</el-button>
         <el-table
                 :data="blogList"
-                style="width: 100%">
+                style="width: 100%"
+                stripe>
             <el-table-column
                     type="index">
             </el-table-column>

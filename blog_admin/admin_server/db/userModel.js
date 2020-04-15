@@ -10,7 +10,7 @@ let userSchema = new Schema({
     //头像，注册时默认，后期可以用户自己修改
     avatar: {type: String, default: 'http://localhost:3000/images/defaultAvatar.jpg'},
     //是否可用  1 可用，0 不可用
-    disabled: {type: Number, default: 1},
+    disabled: {type: Boolean,default: false},
     //是否是管理员
     admin: {type: Boolean,default: false}
 });
