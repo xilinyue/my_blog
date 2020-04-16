@@ -52,5 +52,6 @@ app.use('/api/user',require('./routes/user')); //用户信息相关路由
 app.use('/api/message',require('./routes/message')); //留言信息相关路由
 app.use('/api/links',require('./routes/links')); //友链信息相关路由
 app.use('/api/diary',require('./routes/diary')); //日记信息相关路由
+app.use('/api/login',require('./routes/login')); //登陆
 
 module.exports = app;

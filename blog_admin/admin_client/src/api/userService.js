@@ -16,5 +16,17 @@ export default {
     //updateUserAdminById
     updateUserAdminById(_id,admin) {
         return request.post("/user/updateUserAdminById",{_id,admin});
+    },
+    //用户登录
+    login(username,password){
+        return request.post("/login/userLogin",{username,password});
+    },
+    //判断用户登录
+    ifLogin(){
+        return request.get("/login/ifUserLogin");
+    },
+    //用户退出登录
+    userLogout() {
+        return request.post("/login/userLogout");
     }
 }

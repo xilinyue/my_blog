@@ -127,6 +127,8 @@
                 }).then(() => {
                     this.$refs.addDiaryForm.resetFields();
                     this.addDialogVisible = false;
+                    this.addDiaryForm.imgArr = [];
+                    this.$refs.uploadDiaryImg.clearFiles();
                 }).catch(() => {
                     this.$message({
                         type: 'info',

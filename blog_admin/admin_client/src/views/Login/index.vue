@@ -7,17 +7,18 @@
                     <el-input v-model="loginForm.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码：" prop="password">
-                    <el-input v-model="loginForm.password"></el-input>
+                    <el-input type="password" v-model="loginForm.password"></el-input>
                 </el-form-item>
             </el-form>
             <div class="login-submit">
-                <el-button type="primary">登录</el-button>
+                <el-button type="primary" @click="submitLogin">登录</el-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import userService from "../../api/userService";
     export default {
         name: "index",
         data() {
@@ -62,7 +63,33 @@
                 }
             }
         },
-        methods: {}
+        methods: {
+            submitLogin() {
+                this.$refs.loginForm.validate(valid => {
+                    if (valid){
+                        userService.login(this.loginForm.username,this.loginForm.password).then(res => {
+                            if (res.code){
+                                //登录失败
+                                this.$message({
+                                    type: 'error',
+                                    message: res.msg,
+                                    duration: 3000
+                                });
+                            }else{
+                                this.$message({
+                                    type: 'success',
+                                    message: res.msg,
+                                    duration: 3000
+                                });
+                                //将数据储存到store中
+                                this.$store.dispatch('login',res.data);
+                                this.$router.push("/admin");
+                            }
+                        });
+                    }
+                });
+            }
+        }
     }
 </script>
 

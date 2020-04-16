@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index';
+import userService from "../api/userService";
 
 Vue.use(VueRouter);
 const routes = [
@@ -9,7 +11,22 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'Admin',
+    beforeEnter(to,from,next){
+        //判断是否登录
+        if (store.userInfo){
+            next();
+        }else{
+            //然后发起请求查看是否登录，本地可能刷新了
+            userService.ifLogin().then(res => {
+                if (res.code === 0){
+                  store.dispatch('login',res.data);
+                  next();
+                }else{
+                  next("/login")
+                }
+            });
+        }
+    },
     component: () => import('../views/Admin'),
     children: [
       {
