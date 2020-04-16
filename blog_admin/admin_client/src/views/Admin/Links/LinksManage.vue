@@ -187,7 +187,7 @@
             },
             //获取总数
             getTotalLinks() {
-                linksService.getTotalLinks(this.query).then(res=>{
+                linksService.getTotalLinks().then(res=>{
                     if (res.code === 0){
                         this.totalLinks = res.total;
                     }
