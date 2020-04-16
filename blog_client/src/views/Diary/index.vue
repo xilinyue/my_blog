@@ -3,8 +3,8 @@
         <Nav></Nav>
             <h3>众里寻他千百度，那人却在灯火阑珊处</h3>
             <el-timeline>
-                <el-timeline-item timestamp="2018/4/12" placement="top"
-                    v-for="item in diaryList" :key="item._id">
+                <el-timeline-item placement="top"
+                    v-for="item in diaryList" :timestamp="item.date"  :key="item._id">
                     <el-card>
                         <h4>{{item.title}}</h4>
                         <div v-html="item.content" class="content"></div>
@@ -22,6 +22,7 @@
 
 <script>
     import Nav from "../../components/Nav";
+    import diaryService from "../../api/diaryService";
     export default {
         name: "index",
         components: {
@@ -29,25 +30,24 @@
         },
         data() {
             return{
-                diaryList: [
-                    {
-                        _id: '11111',
-                        title: '这是假数据',
-                        date: '2020/4/18',
-                        content: '<p>asfdsafsa</p>',
-                        imgArr: [
-                            'http://localhost:3000/images/defaultSurface.png','http://localhost:3000/images/defaultSurface.png'
-                        ],
-                    },{
-                        _id: '2222',
-                        title: '这是假数据',
-                        date: '2020/4/18',
-                        content: '<p>asfdsafsa</p>',
-                        imgArr: [
-                            'http://localhost:3000/images/defaultSurface.png','http://localhost:3000/images/defaultSurface.png'
-                        ],
-                    }
-                ]
+                diaryList: []
+            }
+        },
+        mounted() {
+            this.getDiaryList();
+        },
+        methods: {
+            getDiaryList() {
+                diaryService.getDiaryList().then(res => {
+                   res = res.data;
+                   if (res.code === 0){
+                       this.diaryList = res.data.map(item => {
+                           let date = new Date(item.date);
+                           item.date = date.toLocaleDateString();
+                           return item;
+                       });
+                   }
+                });
             }
         }
     }

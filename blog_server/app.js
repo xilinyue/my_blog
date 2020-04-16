@@ -51,6 +51,8 @@ app.use('/api/user', require('./routes/users'));
 app.use('/api/article', require('./routes/article'));
 app.use('/api/message',require('./routes/message'));
 app.use('/api/upload',require('./routes/upload'));
+app.use('/api/diary',require('./routes/diary'));
+app.use('/api/links',require('./routes/links'));
 
 module.exports = app;
 

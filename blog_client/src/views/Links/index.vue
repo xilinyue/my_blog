@@ -28,7 +28,7 @@
                 <p>申请提交后若无其它原因将在24小时内审核,如超过时间还未通过,请私信我.(各种额外因素)</p>
             </div>
             <ul class="links-list">
-                <li class="links-item" v-for="(item,index) in linksList" :key="index">
+                <li class="links-item" v-for="(item,index) in linksList" :key="index" @click="toWenLink(item.webLink)">
                     <a :href="item.href" target="_blank">
                         <img :src="item.icon" alt="">
                         <h3>{{item.name}}</h3>
@@ -43,6 +43,7 @@
 <script>
     import Nav from "../../components/Nav";
     import MyCanvas from "./Canvas";
+    import linksService from "../../api/linksService";
     export default {
         name: "index",
         components: {
@@ -50,17 +51,23 @@
         },
         data() {
             return{
-                linksList: [
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'},
-                    {name: '风尘局',href: 'https://www.fengchenju.xyz',icon: 'https://www.fengchenju.xyz/avatar.png',desc: '热爱并坚持使用.NET的全栈开发者的博客'}
-                ]
+                linksList: []
+            }
+        },
+        mounted() {
+            this.getLinksList();
+        },
+        methods: {
+            getLinksList() {
+                linksService.getLinksList().then(res => {
+                    res = res.data;
+                    if (res.code === 0){
+                        this.linksList = res.data;
+                    }
+                });
+            },
+            toWenLink(link){
+                window.open(link,"_blank");
             }
         }
     }
@@ -141,12 +148,14 @@
             box-sizing: border-box;
             margin-top: 20px;
             .links-item{
+                user-select: none;
                 background-color: #fff;
                 width: 23%;
                 margin-bottom: 1.5%;
                 padding: 0 10px 10px;
                 box-sizing: border-box;
                 transition: transform .5s;
+                cursor: pointer;
                 &:hover{
                     transform: translateY(-8px);
                     box-shadow:  0 0 5px #EEE;

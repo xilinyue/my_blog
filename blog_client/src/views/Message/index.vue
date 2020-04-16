@@ -179,17 +179,19 @@
                     let data = res.data;
                     if (data.code ===0 ){
                         //添加reply
-                        this.commentList = data.data.map(item => {
-                            item.reply = {
-                                userId : "",//id
-                                content : "",//回复内容
-                                atUserName : "",//字符串
-                                date : "",//日期
-                                ifShow : false,
-                                lastIndexArr : []
-                            };
-                            return item;
-                        });
+                        if (data.data){
+                            this.commentList = data.data.map(item => {
+                                item.reply = {
+                                    userId : "",//id
+                                    content : "",//回复内容
+                                    atUserName : "",//字符串
+                                    date : "",//日期
+                                    ifShow : false,
+                                    lastIndexArr : []
+                                };
+                                return item;
+                            });
+                        }
                     }
                 })
             },

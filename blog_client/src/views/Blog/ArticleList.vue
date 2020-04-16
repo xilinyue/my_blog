@@ -121,7 +121,6 @@
             },
             getArticleList() {
                 this.query.tag = this.tagList[parseInt(this.query.index)];
-                console.log(this.query);
                 articleService.getArticleList(this.query).then(res => {
                     let data = res.data;
                     if (data.code === 0){

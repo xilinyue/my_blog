@@ -3,6 +3,7 @@ var router = express.Router();
 
 const userModel =  require('../db/userModel');
 const visitorModel =  require('../db/visitorModel');
+const cryptoUtil = require("../util/cryptoUtil");
 
 //用户注册
 router.post('/addUser',(req,res) => {
@@ -38,7 +39,6 @@ router.post('/addUser',(req,res) => {
     //验证用户名是否已存在
     userModel.find({username}).then(doc => {
         //用户名已存在
-        console.log(doc)
         if(doc.length > 0) {
             res.send({
                 code: 1,
@@ -47,10 +47,10 @@ router.post('/addUser',(req,res) => {
             return;
         }
         //用户名不存在，进行用户注册
+        password = cryptoUtil.encodePassword(password);
         userModel.create({
             username,password
         }).then(doc => {
-            console.log(doc);
             res.send({
                 code: 0,
                 msg: '注册成功'
@@ -89,7 +89,7 @@ router.post('/login',(req,res) => {
                 });
                 return;
             }
-            if(password === doc.password){
+            if(cryptoUtil.encodePassword(password) === doc.password){
                 req.session.userInfo = doc;
                 res.send({
                     code: 0,
@@ -107,6 +107,11 @@ router.post('/login',(req,res) => {
                     //存入信息
                     visitorModel.create({username: username,avatar: doc.avatar})
                 })
+            }else{
+                res.send({
+                    code: 1,
+                    msg: '密码错误'
+                });
             }
         }).catch(e => {
             res.send({
