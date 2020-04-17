@@ -52,7 +52,7 @@
             <el-form-item label="封面">
                 <el-upload
                         class="avatar-uploader"
-                        action="http://localhost:3001/api/article/uploadSurface"
+                        action="http://47.104.155.124:3001/api/article/uploadSurface"
                         :show-file-list="false"
                         :on-success="handleSurfaceSuccess"
                         :before-upload="beforeSurfaceUpload">

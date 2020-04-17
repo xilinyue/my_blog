@@ -64,7 +64,7 @@
                 <el-form-item label="上传图片">
                     <el-upload
                             ref="uploadDiaryImg"
-                            action="http://localhost:3001/api/diary/uploadDiaryImage"
+                            action="http://47.104.155.124:3001/api/diary/uploadDiaryImage"
                             list-type="picture-card"
                             :on-success="onUploadSuccess"
                             :on-remove="handleRemove">

@@ -42,10 +42,10 @@ router.post('/avatar',(req,res) => {
           }
           userModel.updateOne(
             {_id: req.session.userInfo._id},
-            {avatar:"http://localhost:3000/images/upload/avatar/"+req.file.filename}
+            {avatar:"http://47.104.155.124:3000/images/upload/avatar/"+req.file.filename}
           ).then(data=>{
             //需要更新session存储的数据
-            req.session.userInfo.avatar = "http://localhost:3000/images/upload/avatar/"+req.file.filename;
+            req.session.userInfo.avatar = "http://47.104.155.124:3000/images/upload/avatar/"+req.file.filename;
             res.send("OK");
           }).catch(()=>{
             res.sendStatus(500);

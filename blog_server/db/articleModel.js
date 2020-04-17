@@ -11,7 +11,7 @@ let articleSchema = new Schema({
     date: {type: Date, default: Date.now},
     updateDate: {type: Date,default: Date.now},
     tag: {type: String, required: true},
-    surface: {type: String, default: '/images/defaultSurface.png'},   //存储文章的图片，默认值
+    surface: {type: String, default: 'http://localhost:3000/images/defaultSurface.png'},   //存储文章的图片，默认值
     pv: {type: Number, default: 0},
     comment: [
         {type: Schema.Types.ObjectId, ref: 'comment'}

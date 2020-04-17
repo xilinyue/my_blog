@@ -1,46 +1,49 @@
 <template>
     <div class="article-list">
         <el-backtop></el-backtop>
-        <div class="list-item" v-for="(item,index) in articleList" :key="item._id" :class="{'top-one': index === 0}">
-            <h5>
-                <span>【{{item.type}}】</span>
-                <router-link :to="'/articleDetail/'+item._id">{{item.title}}</router-link>
-            </h5>
-            <div class="time">
-                <span class="date">{{item.date | date}}</span>
-                <span class="month">
+        <div v-if="articleList">
+            <div class="list-item" v-for="(item,index) in articleList" :key="item._id" :class="{'top-one': index === 0}">
+                <h5>
+                    <span>【{{item.type}}】</span>
+                    <router-link :to="'/articleDetail/'+item._id">{{item.title}}</router-link>
+                </h5>
+                <div class="time">
+                    <span class="date">{{item.date | date}}</span>
+                    <span class="month">
                     {{item.date | month}}
                     <span>月</span>
                 </span>
-                <span class="year">{{item.date | year}}</span>
-            </div>
-            <div class="content">
-                <a href="javascript:;" class="cover">
-                    <img :src="item.surface">
-                    <div class="shadow"></div>
-                </a>
-                {{item.abstract}}
-            </div>
-            <div class="read-more">
-                <router-link :to="'/articleDetail/'+item._id">继续阅读</router-link>
-            </div>
-            <aside>
-                <div>
-                    <i class="el-icon-price-tag"></i>
-                    <span>{{item.tag}}</span>
+                    <span class="year">{{item.date | year}}</span>
                 </div>
-                <div>
+                <div class="content">
+                    <a href="javascript:;" class="cover">
+                        <img :src="item.surface">
+                        <div class="shadow"></div>
+                    </a>
+                    {{item.abstract}}
+                </div>
+                <div class="read-more">
+                    <router-link :to="'/articleDetail/'+item._id">继续阅读</router-link>
+                </div>
+                <aside>
+                    <div>
+                        <i class="el-icon-price-tag"></i>
+                        <span>{{item.tag}}</span>
+                    </div>
+                    <div>
                     <span>
                         <i class="el-icon-view"></i>
                         {{item.pv}}
                     </span>
-                    <span>
+                        <span>
                         <i class="el-icon-chat-dot-round"></i>
                         {{item.comment.length}}
                     </span>
-                </div>
-            </aside>
+                    </div>
+                </aside>
+            </div>
         </div>
+        <div v-else style="text-align: center;width: 100%;height: 200px;line-height: 200px">暂无数据</div>
         <div class="no-more" v-if="ifNoMore">我也是有底线的^_^</div>
         <div class="loading" v-if="ifLoading">正在加载中...</div>
     </div>
@@ -182,6 +185,7 @@
                 border-bottom: 1px solid #e8e9e7;
                 font-size: 18px;
                 font-weight: 400;
+                display: flex;
                 span{
                     font-size: 16px;
                     font-weight: 400;
@@ -190,7 +194,11 @@
                     color: #f07c82;
                 }
                 a{
+                    width: 369px;
                     color: #7a7374;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                     &:hover{
                         color: #ee3f4d;
                     }

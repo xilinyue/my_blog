@@ -68,7 +68,7 @@
                 searchInput: '',
                 isHasFixed: false,
                 //文章分类
-                articleTypeList: ['全部文章','个人日记','HTML5&CSS3','JavaScript','Vue&Node','其他'],
+                articleTypeList: [],
                 coverTop: this.$route.params.id,
                 hotArticleList: [{title: ''}],
                 visitorList: [],
@@ -317,9 +317,12 @@
                         color: #7a7374;
                         li {
                             height: 40px;
+                            width: 100%;
                             line-height: 40px;
+                            box-sizing: border-box;
+                            display: flex;
                             span:nth-child(1){
-                                display: inline-block;
+                                /*display: inline-block;*/
                                 width: 20px;
                                 height: 20px;
                                 text-align: center;
@@ -344,7 +347,14 @@
                                 }
                             }
                             span:nth-child(2){
+                                /*display: inline-block;*/
+                                width: 233px;
+                                height: 20px;
+                                line-height: 20px;
                                 cursor: pointer;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
                                 &:hover{
                                     color: #f07c82;
                                     text-decoration: underline;

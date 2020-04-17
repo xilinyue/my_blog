@@ -44,7 +44,7 @@
                             <div class="title">{{item.title}}</div>
                             <div class="time">{{item.date}}</div>
                             <div class="abstract">{{item.abstract}}</div>
-                            <a href="" class="link">阅读更多</a>
+                            <router-link :to="'/articleDetail/'+item._id" class="link">阅读更多</router-link>
                         </div>
                     </div>
                 </div>

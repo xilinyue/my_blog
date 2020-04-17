@@ -44,7 +44,7 @@ router.post("/",(req,res) => {
         res.send ({
             code: 0,
             msg: '上传成功',
-            surface: 'http://localhost:3001/images/article/surface/' + req.file.filename
+            surface: 'http://47.104.155.124:3001/images/article/surface/' + req.file.filename
         });
     });
 })

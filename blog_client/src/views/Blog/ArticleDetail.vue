@@ -27,7 +27,7 @@
                 <div class="description">
                     <p>非特殊说明，本文版权归 Mr.Gan 所有，转载请注明出处.</p>
                     <p>本文标题： <a href="javascript:;">{{articleInfo.title}}</a></p>
-                    <p>本文网址： <router-link :to="'/articleDetail/' + articleInfo._id">http://localhost:8080/#/articleDetail/{{articleInfo._id}}</router-link></p>
+                    <p>本文网址： <router-link :to="'/articleDetail/' + articleInfo._id">http://47.104.155.124/:3000/#/articleDetail/{{articleInfo._id}}</router-link></p>
                 </div>
                 <div class="music"></div>
                 <div class="extend" v-if="hasExtendData">

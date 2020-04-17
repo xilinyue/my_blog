@@ -8,7 +8,7 @@
                 :close-on-click-modal="false">
             <el-upload
                     class="avatar-uploader"
-                    action="http://localhost:3000/api/upload/avatar"
+                    action="http://47.104.155.124:3000/api/upload/avatar"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
