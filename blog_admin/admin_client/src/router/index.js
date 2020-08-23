@@ -13,12 +13,12 @@ const routes = [
     path: '/admin',
     beforeEnter(to,from,next){
         //判断是否登录
-        if (store.userInfo){
+        if (store.userInfo && (store.userInfo.admin === 'admin')){
             next();
         }else{
             //然后发起请求查看是否登录，本地可能刷新了
             userService.ifLogin().then(res => {
-                if (res.code === 0){
+                if (res.code === 0 && (res.data.admin === 'admin')){
                   store.dispatch('login',res.data);
                   next();
                 }else{

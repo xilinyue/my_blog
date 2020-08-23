@@ -44,7 +44,8 @@ router.post("/userLogin",(req,res) => {
                     req.session.userInfo = {
                         _id: data._id,
                         username: username,
-                        avatar: data.avatar
+                        avatar: data.avatar,
+                        admin: 'admin'
                     };
                     res.send({
                         code: 0,
@@ -52,7 +53,8 @@ router.post("/userLogin",(req,res) => {
                         data: {
                             _id: data._id,
                             username: username,
-                            avatar: data.avatar
+                            avatar: data.avatar,
+                            admin: 'admin'
                         }
                     });
                 }else{
